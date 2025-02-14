@@ -1,6 +1,5 @@
 -- CONFIG
 local DEBUG_MODE = true
-local websocket_url = "ws://jajasteele.mooo.com:15191"
 -- CONFIG
 
 local timer = require("timer")
