@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; width: 100%; background-color: black;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AESS Dashboard</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body style="height: calc(100% - 30px); width: calc(100% - 30px); overflow: hidden; margin: 15px;">
+    <div style="height: 100%; width: 100%; background-color: rgb(43, 43, 49); border-radius: 10px;">
+        <div style="height: calc(100% - 20px); width: calc(100% - 20px); overflow: hidden; padding: 10px; color: lightsteelblue; font-family: monospace; font-size: x-large;">
+            <div style="height: 30px; width: calc(100% - 5px);" class="basic_box">
+                <input type="url" style="width: 300px;" class="toolbar_input" placeholder="AESS Server URL" id="input_url">
+                <input type="text" style="width: 100px;" placeholder="AESS Key" class="toolbar_input" id="input_key">
+                <input type="button" style="width: 100px;" class="toolbar_button" value="Fetch History" id="button_fetch_history">
+                <div style="float: left;" class="vr"></div>
+                <select style="width: 150px;" class="toolbar_button" id="dropdown_display_mode">
+                    <option value="hour">Per Hour</option>
+                    <option value="min">Per Minute</option>
+                </select>
+                <input type="button" style="width: 150px;" class="toolbar_button" value="Test Display" id="button_test_display">
+            </div>
+            <div style="height: calc(100% - 55px); width: calc(100% - 5px);" class="basic_box">
+                <div style="height: 100%; width: 300px; border-right: solid aquamarine; float: left; margin: 0%; overflow-y: scroll; display: flex; flex-direction: column;" id="time_column">
+
+                </div>
+                <div style="height: calc(100% - 50px); width: calc(100% - 310px); border-left: solid aquamarine; float: right; margin: 0%; overflow-y: scroll; font-size: 10px;" id="display_column">
+                    
+                </div>
+
+                <div style="height: 50px; width: calc(100% - 310px); border-left: solid aquamarine; border-top: solid aquamarine; float: right; margin: 0%; overflow-y: hidden; font-size: 20px;" id="info_box">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
