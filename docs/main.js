@@ -1,6 +1,14 @@
 var raw_data = []
 var time_to_diff = new Map()
 
+var presets = JSON.parse(localStorage.getItem("address_presets"))
+presets = presets || {}
+const button_save_preset = document.getElementById("button_save_preset")
+const button_load_preset = document.getElementById("button_load_preset")
+const dropdown_presets = document.getElementById("dropdown_presets")
+const button_new_preset = document.getElementById("button_new_preset")
+const button_del_preset = document.getElementById("button_del_preset")
+
 function httpGetAsync(theUrl, payload, callback)
 {
     console.log("New request: " + theUrl + " " + payload)
@@ -32,6 +40,58 @@ document.getElementById("button_test_display").addEventListener("click", functio
         }
         display_column.appendChild(new_element)
     }
+})
+
+function refreshPresetDropdown() {
+    dropdown_presets.innerHTML = ""
+    Object.keys(presets).forEach((name) => {
+        data = presets[name]
+        const new_element = document.createElement("option")
+        new_element.value = name
+        new_element.innerText = name
+        dropdown_presets.appendChild(new_element)
+    })
+}
+
+refreshPresetDropdown()
+
+button_new_preset.addEventListener("click", function() {
+    const url_val = document.getElementById("input_url").value
+    const key_val = document.getElementById("input_key").value
+
+    var new_name = window.prompt("Enter a name for the preset:")
+    presets[new_name] = {url:url_val, key:key_val}
+    localStorage.setItem("address_presets", JSON.stringify(presets))
+    refreshPresetDropdown()
+    dropdown_presets.value = new_name
+})
+
+button_del_preset.addEventListener("click", function() {
+    const curr_val = dropdown_presets.value
+    delete presets[curr_val]
+    localStorage.setItem("address_presets", JSON.stringify(presets))
+    refreshPresetDropdown()
+})
+
+button_load_preset.addEventListener("click", function() {
+    const url_box = document.getElementById("input_url")
+    const key_box = document.getElementById("input_key")
+    const curr_val = dropdown_presets.value
+    
+    var data = presets[curr_val]
+    if (data) {
+        url_box.value = data.url
+        key_box.value = data.key
+    }
+})
+
+button_save_preset.addEventListener("click", function() {
+    const url_val = document.getElementById("input_url").value
+    const key_val = document.getElementById("input_key").value
+    const curr_val = dropdown_presets.value
+    
+    presets[curr_val] = {url:url_val, key:key_val}
+    localStorage.setItem("address_presets", JSON.stringify(presets))
 })
 
 function createDisplayElement(count, name, players) {
