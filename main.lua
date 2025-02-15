@@ -152,6 +152,7 @@ local server = http.createServer("0.0.0.0", 15192, function (req, body)
         return fail_headers, fail_payload
     end
     if args.type == "request_history" then
+        log("History Requested!", log_lvl.info)
         local connection = websocket_storage[args.key]
         local json_data = json.encode({type="request_history"})
         if connection then
@@ -199,6 +200,7 @@ local server = http.createServer("0.0.0.0", 15192, function (req, body)
                 return fail_headers, fail_payload
             end
         else
+            log("Connection '"..args.key.."' doesn't exist!", log_lvl.error)
             local fail_payload = "No Connection"
             local fail_headers = {
                 {"Content-Length", tostring(#fail_payload)}, -- Must always be set if a payload is returned
@@ -218,6 +220,8 @@ log("Web Server started on: http://"..ip_body..":"..(15192), log_lvl.info)
 -- WEBSOCKET STUFF
 local app = require('weblit-app')
 local websocket = require("weblit-websocket")
+
+local heartbeat_response = json.encode({type="sv_heartbeat", content=""})
 
 app
     .bind({
@@ -271,12 +275,13 @@ app
                     end
                 end
                 if data.type == "mc_heartbeat" then
+                    log("Received heartbeat", log_lvl.debug)
                     write({
                         fin = true,
-                        len = "heartbeat",
+                        len = #heartbeat_response,
                         mask = true,
                         opcode = 1,
-                        payload = "heartbeat",
+                        payload = heartbeat_response,
                         rsv1 = false,
                         rsv2= false,
                         rsv3 = false
