@@ -1,5 +1,5 @@
 -- CONFIG
-local DEBUG_MODE = true
+local DEBUG_MODE = false
 -- CONFIG
 
 local timer = require("timer")
@@ -120,10 +120,12 @@ local function awaitSocketMsg(key_name, msg_type, timeout_seconds)
         if last_msg then
             table.remove(socket_msg_queue, 1)
             if (key_name == last_msg.key) and (msg_type == last_msg.data.type or not msg_type) then
+                socket_msg_queue = {}
                 return last_msg
             end
         end
         if os.time() >= timeout then
+            socket_msg_queue = {}
             return nil
         end
         timer.sleep(200)
@@ -283,6 +285,9 @@ app
             end
         end
 
+        websocket_storage[key_value] = nil
+        websocket_status[key_value] = "none"
+        websocket_buffer[key_value] = {}
         log(color.foreground.red.."("..key_value..") Websocket Connection Ended", log_lvl.info)
 
         write()
