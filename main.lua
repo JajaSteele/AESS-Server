@@ -152,7 +152,7 @@ local server = http.createServer("0.0.0.0", 15192, function (req, body)
         return fail_headers, fail_payload
     end
     if args.type == "request_history" then
-        log("History Requested!", log_lvl.info)
+        log("History Requested: "..args.key, log_lvl.info)
         local connection = websocket_storage[args.key]
         local json_data = json.encode({type="request_history"})
         if connection then
@@ -168,7 +168,7 @@ local server = http.createServer("0.0.0.0", 15192, function (req, body)
                 rsv2= false,
                 rsv3 = false
             })
-            local history_data = awaitSocketMsg(args.key, "response_history", 3)
+            local history_data = awaitSocketMsg(args.key, "response_history", 6)
             websocket_status[args.key] = "none"
             websocket_buffer[args.key] = {}
 
@@ -197,6 +197,7 @@ local server = http.createServer("0.0.0.0", 15192, function (req, body)
                     code = 400,
                     reason = "No Connection",
                 }
+                log("History request timed out ("..args.key..")", log_lvl.error)
                 return fail_headers, fail_payload
             end
         else
